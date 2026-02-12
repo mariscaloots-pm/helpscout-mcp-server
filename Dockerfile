@@ -40,6 +40,7 @@ COPY --from=builder /app/mcp.json ./
 
 # Change ownership to app user
 RUN chown -R help-scout:nodejs /app
+RUN npm install -g supergateway
 USER help-scout
 
 # Expose port (if running in HTTP mode)
@@ -50,7 +51,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "console.log('Health check passed')" || exit 1
 
 # Default command
-RUN npm install -g supergateway
 ENTRYPOINT ["npx", "supergateway", "--stdio", "node dist/index.js", "--port", "8080"]
 
 # Labels for metadata
