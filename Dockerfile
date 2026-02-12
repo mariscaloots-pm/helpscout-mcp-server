@@ -1,3 +1,33 @@
+# Use Node.js 20 LTS as base image
+FROM node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci && npm cache clean --force
+
+# Copy source code and config
+COPY src/ ./src/
+COPY mcp.json ./
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS production
+
+# Create app user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S help-scout -u 1001
+
+# Set working directory
+WORKDIR /app
+
 # Copy package files
 COPY package*.json ./
 
