@@ -51,7 +51,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "console.log('Health check passed')" || exit 1
 
 # Default command
-ENTRYPOINT ["npx", "supergateway", "--stdio", "node dist/index.js", "--port", "8080"]
+ENTRYPOINT npx supergateway --stdio "node dist/index.js" --port 8080
 
 # Labels for metadata
 LABEL name="help-scout-mcp-server" \
