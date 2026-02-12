@@ -43,14 +43,15 @@ RUN chown -R help-scout:nodejs /app
 USER help-scout
 
 # Expose port (if running in HTTP mode)
-EXPOSE 3000
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "console.log('Health check passed')" || exit 1
 
 # Default command
-ENTRYPOINT ["node", "dist/index.js"]
+RUN npm install -g supergateway
+ENTRYPOINT ["npx", "supergateway", "--stdio", "node dist/index.js", "--port", "8080"]
 
 # Labels for metadata
 LABEL name="help-scout-mcp-server" \
